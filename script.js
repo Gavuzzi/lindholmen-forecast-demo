@@ -1,5 +1,4 @@
 let forecastChart, utilizationChart;
-let timeLogs = generateTimeLogHistory();
 let scenarioHours = 0;
 
 const THEME_COLORS = {
@@ -157,11 +156,6 @@ function tickClock() {
   document.getElementById("clock").textContent = new Date().toLocaleTimeString("sv-SE");
 }
 
-function simulateTimeLog() {
-  timeLogs.push(generateTimeLogEntry());
-  renderTicker();
-}
-
 function initScenarioSlider() {
   const slider = document.getElementById("scenarioSlider");
   const valueLabel = document.getElementById("scenarioValue");
@@ -173,9 +167,112 @@ function initScenarioSlider() {
   });
 }
 
-initTheme();
-initScenarioSlider();
-tickClock();
-renderAll();
-setInterval(tickClock, 1000);
-setInterval(simulateTimeLog, 7000);
+function populateConsultantSelects() {
+  const selects = [document.getElementById("pConsultant"), document.getElementById("lConsultant")];
+  for (const select of selects) {
+    select.innerHTML = CONSULTANTS.map((c) => `<option value="${c.id}">${c.name}</option>`).join("");
+  }
+}
+
+function populateProjectSelect() {
+  const select = document.getElementById("lProject");
+  select.innerHTML = PROJECTS.map((p) => `<option value="${p.id}">${p.name} (${p.client})</option>`).join("");
+}
+
+function showStatus(elId, message, isError = false) {
+  const el = document.getElementById(elId);
+  el.textContent = message;
+  el.classList.toggle("error", isError);
+}
+
+async function refreshAndRender() {
+  await loadAllData();
+  populateConsultantSelects();
+  populateProjectSelect();
+  renderAll();
+}
+
+function initModal() {
+  const modal = document.getElementById("manageModal");
+  document.getElementById("manageButton").addEventListener("click", () => modal.classList.add("open"));
+  document.getElementById("modalClose").addEventListener("click", () => modal.classList.remove("open"));
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.remove("open");
+  });
+
+  document.querySelectorAll(".tab-button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-button").forEach((b) => b.classList.remove("active"));
+      document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.querySelector(`[data-tab-panel="${btn.dataset.tab}"]`).classList.add("active");
+    });
+  });
+}
+
+function initForms() {
+  document.getElementById("consultantForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+      await addConsultant({
+        name: document.getElementById("cName").value,
+        role: document.getElementById("cRole").value,
+        costRate: Number(document.getElementById("cCostRate").value),
+        billRate: Number(document.getElementById("cBillRate").value),
+        capacity: Number(document.getElementById("cCapacity").value),
+      });
+      showStatus("consultantStatus", "Added!");
+      e.target.reset();
+      await refreshAndRender();
+    } catch (err) {
+      showStatus("consultantStatus", "Error: " + err.message, true);
+    }
+  });
+
+  document.getElementById("projectForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+      await addProject({
+        name: document.getElementById("pName").value,
+        client: document.getElementById("pClient").value,
+        consultantId: document.getElementById("pConsultant").value,
+        hoursPerWeek: Number(document.getElementById("pHours").value),
+        weeksRemaining: Number(document.getElementById("pWeeks").value),
+      });
+      showStatus("projectStatus", "Added!");
+      e.target.reset();
+      await refreshAndRender();
+    } catch (err) {
+      showStatus("projectStatus", "Error: " + err.message, true);
+    }
+  });
+
+  document.getElementById("logForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+      await logTime({
+        consultantId: document.getElementById("lConsultant").value,
+        projectId: document.getElementById("lProject").value,
+        hours: Number(document.getElementById("lHours").value),
+      });
+      showStatus("logStatus", "Logged!");
+      e.target.reset();
+      await refreshAndRender();
+    } catch (err) {
+      showStatus("logStatus", "Error: " + err.message, true);
+    }
+  });
+}
+
+async function init() {
+  initTheme();
+  initScenarioSlider();
+  initModal();
+  initForms();
+  tickClock();
+  await refreshAndRender();
+  setInterval(tickClock, 1000);
+  setInterval(refreshAndRender, 20000); // poll for changes from other users
+}
+
+init();

@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,6 +18,7 @@
         <span class="brand-sub">Project Forecast Control</span>
       </div>
       <div class="topbar-right">
+        <button class="manage-button" id="manageButton">+ Manage Data</button>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme">🌙</button>
         <div class="clock" id="clock">--:--:--</div>
       </div>
@@ -68,7 +70,51 @@
     </section>
   </div>
 
+  <div class="modal-overlay" id="manageModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Manage Data</h2>
+        <button class="modal-close" id="modalClose">✕</button>
+      </div>
+
+      <div class="modal-tabs">
+        <button class="tab-button active" data-tab="consultant">Add Consultant</button>
+        <button class="tab-button" data-tab="project">Add Project</button>
+        <button class="tab-button" data-tab="log">Log Hours</button>
+      </div>
+
+      <form class="tab-panel active" id="consultantForm" data-tab-panel="consultant">
+        <label>Name <input type="text" id="cName" required></label>
+        <label>Role <input type="text" id="cRole" required></label>
+        <label>Cost rate (kr/h) <input type="number" id="cCostRate" required></label>
+        <label>Bill rate (kr/h) <input type="number" id="cBillRate" required></label>
+        <label>Capacity (h/week) <input type="number" id="cCapacity" required></label>
+        <button type="submit">Add Consultant</button>
+        <p class="form-status" id="consultantStatus"></p>
+      </form>
+
+      <form class="tab-panel" id="projectForm" data-tab-panel="project">
+        <label>Project name <input type="text" id="pName" required></label>
+        <label>Client <input type="text" id="pClient" required></label>
+        <label>Consultant <select id="pConsultant" required></select></label>
+        <label>Hours/week <input type="number" id="pHours" required></label>
+        <label>Weeks remaining <input type="number" id="pWeeks" required></label>
+        <button type="submit">Add Project</button>
+        <p class="form-status" id="projectStatus"></p>
+      </form>
+
+      <form class="tab-panel" id="logForm" data-tab-panel="log">
+        <label>Consultant <select id="lConsultant" required></select></label>
+        <label>Project <select id="lProject" required></select></label>
+        <label>Hours <input type="number" step="0.1" id="lHours" required></label>
+        <button type="submit">Log Hours</button>
+        <p class="form-status" id="logStatus"></p>
+      </form>
+    </div>
+  </div>
+
   <script src="data.js"></script>
+  <script src="supabase-client.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

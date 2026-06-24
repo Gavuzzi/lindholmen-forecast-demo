@@ -433,8 +433,16 @@ html[data-theme="light"] .stat-card {
     flex: none;
   }
 
+  .main-row .panel {
+    height: 320px;
+    flex: none;
+  }
+
   .chart-panel canvas {
-    min-height: 260px;
+    flex: 1;
+    height: 100% !important;
+    max-height: 100%;
+    min-height: 0;
   }
 
   .scenario-row {

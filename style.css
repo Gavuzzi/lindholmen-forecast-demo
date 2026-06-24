@@ -1,0 +1,238 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f1722;
+  --panel: #16212f;
+  --panel-border: #233248;
+  --accent: #3fb8af;
+  --accent-soft: #6fd4cb;
+  --text: #eaf1f7;
+  --text-dim: #8ea3b8;
+  --green: #5fbf7f;
+  --amber: #e0a64f;
+  --red: #d4716a;
+}
+
+html[data-theme="light"] {
+  --bg: #f4f7f9;
+  --panel: #ffffff;
+  --panel-border: #dde6ec;
+  --accent: #1f8f86;
+  --accent-soft: #2faa9f;
+  --text: #1a2733;
+  --text-dim: #6b7e90;
+  --green: #2f9e57;
+  --amber: #b97c1f;
+  --red: #c0524a;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  height: 100%;
+  overflow: hidden;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 28px 40px;
+  gap: 24px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.brand-name {
+  font-family: 'Fraunces', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--accent-soft);
+  margin-right: 14px;
+}
+
+.brand-sub {
+  font-size: 1.05rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.clock {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.theme-toggle {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  border-radius: 999px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-card.highlight {
+  background: linear-gradient(135deg, var(--panel-border), var(--panel));
+  border-color: var(--accent);
+}
+
+html[data-theme="light"] .panel,
+html[data-theme="light"] .stat-card {
+  box-shadow: 0 2px 10px rgba(26, 39, 51, 0.06);
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-family: 'Fraunces', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
+.main-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 20px;
+  flex: 1.4;
+  min-height: 0;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panel h2 {
+  font-size: 1.05rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.chart-panel canvas {
+  flex: 1;
+  max-height: 100%;
+}
+
+.scenario-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  height: 190px;
+}
+
+.scenario-control {
+  margin: 12px 0;
+}
+
+.scenario-control label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.scenario-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+  height: 6px;
+}
+
+.scenario-hint {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-top: auto;
+}
+
+.ticker {
+  list-style: none;
+  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ticker li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--panel-border);
+  animation: fadeIn 0.4s ease;
+  gap: 12px;
+}
+
+.ticker li .time {
+  color: var(--text-dim);
+  width: 70px;
+  flex-shrink: 0;
+}
+
+.ticker li .who {
+  flex: 1;
+}
+
+.ticker li .hours {
+  color: var(--accent-soft);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}

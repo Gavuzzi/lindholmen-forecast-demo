@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lindholmen Advisory — Forecast Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="dashboard">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-name">Lindholmen Advisory</span>
+        <span class="brand-sub">Project Forecast Control</span>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark theme">🌙</button>
+        <div class="clock" id="clock">--:--:--</div>
+      </div>
+    </header>
+
+    <section class="stats-row">
+      <div class="stat-card">
+        <span class="stat-label">Revenue Forecast (8wk)</span>
+        <span class="stat-value" id="revenueForecast">0 kr</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Cost Forecast (8wk)</span>
+        <span class="stat-value" id="costForecast">0 kr</span>
+      </div>
+      <div class="stat-card highlight">
+        <span class="stat-label">Margin</span>
+        <span class="stat-value" id="marginValue">0%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Avg. Utilization</span>
+        <span class="stat-value" id="avgUtilization">0%</span>
+      </div>
+    </section>
+
+    <section class="main-row">
+      <div class="panel chart-panel">
+        <h2>Revenue vs. Cost Forecast</h2>
+        <canvas id="forecastChart"></canvas>
+      </div>
+      <div class="panel chart-panel">
+        <h2>Utilization by Consultant</h2>
+        <canvas id="utilizationChart"></canvas>
+      </div>
+    </section>
+
+    <section class="scenario-row">
+      <div class="panel scenario-panel">
+        <h2>Scenario: New Project</h2>
+        <div class="scenario-control">
+          <label for="scenarioSlider">Additional hours/week: <span id="scenarioValue">0</span>h</label>
+          <input type="range" id="scenarioSlider" min="0" max="40" value="0" step="2">
+        </div>
+        <p class="scenario-hint">Simulate winning a new project — see the impact on revenue, cost, margin, and team utilization before it happens.</p>
+      </div>
+      <div class="panel ticker-panel">
+        <h2>Recent Time Logs</h2>
+        <ul class="ticker" id="timeTicker"></ul>
+      </div>
+    </section>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

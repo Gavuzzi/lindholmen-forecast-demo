@@ -241,6 +241,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 }
 
 .stat-card.highlight {
@@ -264,6 +265,8 @@ html[data-theme="light"] .stat-card {
   font-family: 'Fraunces', serif;
   font-size: 2.4rem;
   font-weight: 700;
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 
 .main-row {
@@ -366,4 +369,92 @@ html[data-theme="light"] .stat-card {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  html, body {
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .dashboard {
+    height: auto;
+    min-height: 100vh;
+    padding: 18px 16px;
+    gap: 16px;
+  }
+
+  .panel {
+    padding: 16px 18px;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .brand-name {
+    font-size: 1.6rem;
+  }
+
+  .topbar-right {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .manage-button {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 12px 14px;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+  }
+
+  .stat-value {
+    font-size: 1.4rem;
+  }
+
+  .main-row {
+    grid-template-columns: minmax(0, 1fr);
+    flex: none;
+  }
+
+  .chart-panel canvas {
+    min-height: 260px;
+  }
+
+  .scenario-row {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+
+  .modal {
+    width: 92vw;
+    max-height: 85vh;
+    padding: 20px;
+  }
+
+  .modal-tabs {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
 }
